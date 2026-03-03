@@ -126,15 +126,20 @@ export default function App() {
   }, []);
 
   const signInMagic = async () => {
-    const email = authEmail.trim();
-    if (!email) return;
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: window.location.origin },
-    });
-    if (error) alert(error.message);
-    else alert("Magic link sent. Check your email.");
-  };
+  const email = authEmail.trim();
+  if (!email) return;
+
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: window.location.origin,
+      shouldCreateUser: true,
+    },
+  });
+
+  if (error) alert(error.message);
+  else alert("Magic link sent. Check your email.");
+};;
 
   const signOut = async () => {
     await supabase.auth.signOut();
